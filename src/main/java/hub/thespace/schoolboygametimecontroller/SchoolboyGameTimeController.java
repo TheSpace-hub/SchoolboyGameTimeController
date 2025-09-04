@@ -1,11 +1,15 @@
 package hub.thespace.schoolboygametimecontroller;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SchoolboyGameTimeController extends JavaPlugin {
-
     @Override
     public void onEnable() {
-        getLogger().info("Hello world!");
+        saveDefaultConfig();
+
+        TimeController timeController = new TimeController(this);
+        getServer().getPluginManager().registerEvents(timeController, this);
+        Bukkit.getScheduler().runTaskTimer(this, timeController, 20L, 20L);
     }
 }
