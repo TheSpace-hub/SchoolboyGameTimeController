@@ -33,8 +33,7 @@ public class TimeController implements Listener, Runnable {
             remainingTime -= 1;
             playersTime.put(player, remainingTime);
 
-            if (plugin.getConfig().getBoolean("time-indicator.show"))
-                updateBossBar(player);
+            updateBossBar(player);
 
             if (remainingTime <= 0) {
                 endOfTimeNotification(player);
@@ -93,6 +92,11 @@ public class TimeController implements Listener, Runnable {
                 .replace("{time-left}", remainingTime.toString()));
         bossBar.setColor(getBarColorByTime(remainingTime));
         bossBar.setProgress((double) remainingTime / gameTime);
+
+        if (plugin.getConfig().getBoolean("time-indicator.show"))
+            bossBar.addPlayer(player);
+        else
+            bossBar.removeAll();
     }
 
     /**
