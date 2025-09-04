@@ -79,7 +79,7 @@ public class TimeController implements Listener, Runnable {
     }
 
     /**
-     * Update the player's time score
+     * Update the player's time score.
      *
      * @param player Player.
      */
@@ -96,7 +96,7 @@ public class TimeController implements Listener, Runnable {
     }
 
     /**
-     * Get bossbar color by remaining time
+     * Get bossbar color by remaining time.
      *
      * @param time Time.
      * @return Color.
