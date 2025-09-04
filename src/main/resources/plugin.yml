@@ -1,3 +1,7 @@
 name: SchoolboyGameTimeController
 main: hub.thespace.schoolboygametimecontroller.SchoolboyGameTimeController
-version: 1.0.0
+version: 1.1.0
+commands:
+  sgtc-reload:
+    description: Reload plugin
+    permission: sgtc.reload
