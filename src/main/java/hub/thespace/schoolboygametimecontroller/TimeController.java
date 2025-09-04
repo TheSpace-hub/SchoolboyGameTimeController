@@ -1,6 +1,9 @@
 package hub.thespace.schoolboygametimecontroller;
 
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +17,7 @@ import java.util.Map;
 public class TimeController implements Listener, Runnable {
     private final Plugin plugin;
     private final Map<Player, Integer> playersTime = new HashMap<>();
+    private final Map<Player, BossBar> playersBossbar = new HashMap<>();
 
     public TimeController(Plugin plugin) {
         this.plugin = plugin;
@@ -25,15 +29,19 @@ public class TimeController implements Listener, Runnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            int time = playersTime.get(player);
-            time -= 1;
+            int remainingTime = playersTime.get(player);
+            remainingTime -= 1;
+            playersTime.put(player, remainingTime);
 
-            if (time <= 0) {
+            if (plugin.getConfig().getBoolean("time-indicator.show"))
+                updateBossBar(player);
+
+            if (remainingTime <= 0) {
                 endOfTimeNotification(player);
-                time = plugin.getConfig().getInt("game-time");
+                playersTime.put(player, plugin.getConfig().getInt("game-time"));
             }
 
-            playersTime.put(player, time);
+
         }
     }
 
@@ -43,12 +51,18 @@ public class TimeController implements Listener, Runnable {
         int gameTime = plugin.getConfig().getInt("game-time");
 
         playersTime.put(player, gameTime);
+
+        BossBar bossBar = Bukkit.createBossBar("", BarColor.WHITE, BarStyle.SOLID);
+        bossBar.addPlayer(player);
+        playersBossbar.put(player, bossBar);
+        updateBossBar(player);
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         playersTime.remove(player);
+        playersBossbar.remove(player);
     }
 
     /**
@@ -62,6 +76,38 @@ public class TimeController implements Listener, Runnable {
                 plugin.getConfig().getString("end-of-time-broadcast.subtitle").replace("&", "§"),
                 10, 70, 20
         );
+    }
+
+    /**
+     * Update the player's time score
+     *
+     * @param player Player.
+     */
+    private void updateBossBar(Player player) {
+        Integer remainingTime = playersTime.get(player);
+        int gameTime = plugin.getConfig().getInt("game-time");
+
+        BossBar bossBar = playersBossbar.get(player);
+        bossBar.setTitle(plugin.getConfig().getString("time-indicator.title")
+                .replace("&", "§")
+                .replace("{time-left}", remainingTime.toString()));
+        bossBar.setColor(getBarColorByTime(remainingTime));
+        bossBar.setProgress((double) remainingTime / gameTime);
+    }
+
+    /**
+     * Get bossbar color by remaining time
+     *
+     * @param time Time.
+     * @return Color.
+     */
+    private BarColor getBarColorByTime(int time) {
+        if (time >= 60)
+            return BarColor.GREEN;
+        else if (time >= 30)
+            return BarColor.YELLOW;
+        else
+            return BarColor.RED;
     }
 
 }
