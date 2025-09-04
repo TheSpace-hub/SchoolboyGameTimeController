@@ -1,8 +1,7 @@
-# The game time in seconds
-game-time: 60
+game-time: 300
 end-of-time-broadcast:
   title: '&c&lНа этом всё!'
-  subtitle: '&cВремя играть следующему'
+  subtitle: '&cВремя играть следующему.'
 time-indicator:
   show: true
-  title: 'Времени осталось: {time-left}'
+  title: 'Времени осталось: {time-left}с.'
