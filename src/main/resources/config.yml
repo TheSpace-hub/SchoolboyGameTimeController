@@ -1,2 +1,5 @@
 # The game time in seconds
 game-time: 10
+end-of-time-broadcast:
+  title: '&c&lНа этом всё!'
+  subtitle: '&cВремя играть следующему'

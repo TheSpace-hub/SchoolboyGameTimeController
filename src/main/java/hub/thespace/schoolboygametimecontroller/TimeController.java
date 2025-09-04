@@ -1,5 +1,6 @@
 package hub.thespace.schoolboygametimecontroller;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,9 +19,22 @@ public class TimeController implements Listener, Runnable {
         this.plugin = plugin;
     }
 
+    /**
+     * Updates the players' time.
+     */
     @Override
     public void run() {
-        plugin.getLogger().info(playersTime.toString());
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            int time = playersTime.get(player);
+            time -= 1;
+
+            if (time <= 0) {
+                endOfTimeNotification(player);
+                time = plugin.getConfig().getInt("game-time");
+            }
+
+            playersTime.put(player, time);
+        }
     }
 
     @EventHandler
@@ -36,4 +50,18 @@ public class TimeController implements Listener, Runnable {
         Player player = event.getPlayer();
         playersTime.remove(player);
     }
+
+    /**
+     * Notify the player of the end of time.
+     *
+     * @param player Player.
+     */
+    private void endOfTimeNotification(Player player) {
+        player.sendTitle(
+                plugin.getConfig().getString("end-of-time-broadcast.title").replace("&", "§"),
+                plugin.getConfig().getString("end-of-time-broadcast.subtitle").replace("&", "§"),
+                10, 70, 20
+        );
+    }
+
 }
