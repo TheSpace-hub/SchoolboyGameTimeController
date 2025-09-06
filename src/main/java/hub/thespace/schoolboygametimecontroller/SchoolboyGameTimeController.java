@@ -1,5 +1,6 @@
 package hub.thespace.schoolboygametimecontroller;
 
+import hub.thespace.schoolboygametimecontroller.commands.ReloadCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,6 +13,6 @@ public class SchoolboyGameTimeController extends JavaPlugin {
         getServer().getPluginManager().registerEvents(timeController, this);
         Bukkit.getScheduler().runTaskTimer(this, timeController, 20L, 20L);
 
-        Bukkit.getPluginCommand("sgtc-reload").setExecutor(new SGTCCommand(this));
+        Bukkit.getPluginCommand("sgtc-reload").setExecutor(new ReloadCommand(this));
     }
 }

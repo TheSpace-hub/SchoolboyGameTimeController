@@ -1,14 +1,14 @@
-package hub.thespace.schoolboygametimecontroller;
+package hub.thespace.schoolboygametimecontroller.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
-public class SGTCCommand implements CommandExecutor {
+public class ReloadCommand implements CommandExecutor {
     private final Plugin plugin;
 
-    public SGTCCommand(Plugin plugin) {
+    public ReloadCommand(Plugin plugin) {
         this.plugin = plugin;
     }
 
