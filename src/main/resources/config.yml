@@ -1,3 +1,4 @@
+enabled: true
 game-time: 300
 end-of-time-broadcast:
   title: '&c&lНа этом всё!'
